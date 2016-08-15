@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
-        id="com.commontime.cordova.htmlvideo"
+        id="com.commontime.cordova.html-video-fix"
         version="0.0.0">
 
-	<name>HTMLVideo plugin</name>
+	<name>HTMLVideoFix plugin</name>
 
 	<engines>
 		<engine name="cordova" version=">=4.1.1"/>
 	</engines>	
 
-	<js-module src="www/htmlvideo.js" name="HTMLVideo">
-		<clobbers target="plugins.htmlVideo" />
+	<js-module src="www/htmlvideofix.js" name="HTMLVideoFix">
+		<clobbers target="plugins.htmlVideoFix" />
 	</js-module>
 
 	<platform name="android">				
@@ -18,12 +18,12 @@
 		<framework src="commons-io:commons-io:2.4" />   
 					
 		<config-file target="res/xml/config.xml" parent="/*">
-			<feature name="HTMLVideo">
-				<param name="android-package" value="com.commontime.cordova.plugins.htmlvideo.HTMLVideo"/>
+			<feature name="HTMLVideoFix">
+				<param name="android-package" value="com.commontime.cordova.plugins.htmlvideofix.HTMLVideoFix"/>
 			</feature>
 		</config-file>
 									
-		<source-file src="src/android/com/commontime/cordova/plugins/htmlvideo/HTMLVideo.java" target-dir="src/com/commontime/cordova/plugins/htmlvideo/"/>	
+		<source-file src="src/android/com/commontime/cordova/plugins/htmlvideofix/HTMLVideoFix.java" target-dir="src/com/commontime/cordova/plugins/htmlvideofix/"/>	
 		
 	</platform>
 </plugin>

@@ -1,9 +1,10 @@
-package com.commontime.cordova.plugins.htmlvideo;
+package com.commontime.cordova.plugins.htmlvideofix;
 
 import android.content.res.AssetManager;
 import android.util.Log;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
@@ -15,9 +16,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class HTMLVideo extends CordovaPlugin {
+public class HTMLVideoFix extends CordovaPlugin {
 
-    private static final String TAG = "HTMLVideo";
+    private static final String TAG = "HTMLVideoFix";
     private static final String FIX_VIDEO = "fixVideo";
     private static final String HTMLVIDEOS = "htmlvideos";
     private File[] deleteMe;
@@ -48,11 +49,23 @@ public class HTMLVideo extends CordovaPlugin {
                 public void run() {
                     try {
                         String videoPath = args.getString(0);
+                        if( videoPath.startsWith("file://")) {
+                            videoPath = videoPath.replace("file://", "");
+                        }
+                        String location = args.getString(1);
+                        String ext = FilenameUtils.getExtension(videoPath);
+                        String name = FilenameUtils.getBaseName(videoPath);
                         AssetManager am = cordova.getActivity().getAssets();
-                        InputStream is = am.open("www" + videoPath );
+                        if( videoPath.startsWith("/")) {
+                            location = "www";
+                        } else {
+                            location = location.replace("/android_asset/", "");
+                            location = location.substring(0, location.lastIndexOf("/")+1);
+                        }
+                        InputStream is = am.open(location + videoPath);
                         File cacheDir = cordova.getActivity().getCacheDir();
                         File outputDir = new File(cacheDir, HTMLVIDEOS);
-                        File outputFile = File.createTempFile("video", ".mp4", outputDir);
+                        File outputFile = File.createTempFile(name, "." + ext, outputDir);
                         FileOutputStream fos = new FileOutputStream(outputFile);
                         IOUtils.copy(is, fos);
                         callbackContext.success(outputFile.getAbsolutePath());
