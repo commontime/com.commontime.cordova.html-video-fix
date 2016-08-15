@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 
 public class HTMLVideoFix extends CordovaPlugin {
 
@@ -49,20 +50,22 @@ public class HTMLVideoFix extends CordovaPlugin {
                 public void run() {
                     try {
                         String videoPath = args.getString(0);
-                        if( videoPath.startsWith("file://")) {
-                            videoPath = videoPath.replace("file://", "");
-                        }
                         String location = args.getString(1);
                         String ext = FilenameUtils.getExtension(videoPath);
                         String name = FilenameUtils.getBaseName(videoPath);
                         AssetManager am = cordova.getActivity().getAssets();
-                        if( videoPath.startsWith("/")) {
-                            location = "www";
+                        InputStream is = null;
+                        if( videoPath.startsWith("file:///"))
+                            videoPath = URI.create(videoPath).getPath();
+                        if( videoPath.startsWith("/android_asset/")) {
+                            videoPath = videoPath.replace("/android_asset/", "");
+                            is = am.open(videoPath);
                         } else {
                             location = location.replace("/android_asset/", "");
-                            location = location.substring(0, location.lastIndexOf("/")+1);
+                            location = location.substring(0, location.lastIndexOf("/"));
+                            is = am.open(location + "/" + videoPath);
                         }
-                        InputStream is = am.open(location + videoPath);
+
                         File cacheDir = cordova.getActivity().getCacheDir();
                         File outputDir = new File(cacheDir, HTMLVIDEOS);
                         File outputFile = File.createTempFile(name, "." + ext, outputDir);
