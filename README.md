@@ -15,8 +15,8 @@ eg.
 
 ```
 <video controls="">
-  <source src="/bunny.mp4" type="video/mp4"></div>
-  <source src="/bunny.ogg" type="video/ogg"></div>
+  <source src="bunny.mp4" type="video/mp4"></div>
+  <source src="bunny.ogg" type="video/ogg"></div>
 </video>
 ```
 
