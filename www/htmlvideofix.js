@@ -1,7 +1,7 @@
 
   module.exports = {
     fixVideo: function(success, fail, path) {
-      cordova.exec(success, fail, "HTMLVideo", "fixVideo", [path]);
+      cordova.exec(success, fail, "HTMLVideoFix", "fixVideo", [path]);
     },
     fixAllVideos: function(success, fail) {
       var errors = 0;
@@ -45,7 +45,7 @@
                     done();
                   }
                 }
-              }, "HTMLVideo", "fixVideo", [source, location.pathname]);
+              }, "HTMLVideoFix", "fixVideo", [source, location.pathname]);
 
             })(sourceNodes[j]);
           }
