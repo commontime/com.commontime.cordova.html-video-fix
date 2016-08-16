@@ -22,6 +22,7 @@ public class HTMLVideoFix extends CordovaPlugin {
     private static final String TAG = "HTMLVideoFix";
     private static final String FIX_VIDEO = "fixVideo";
     private static final String HTMLVIDEOS = "htmlvideos";
+    private static final String INFINITY = "infinity";
     private File[] deleteMe;
 
     @Override
@@ -44,28 +45,17 @@ public class HTMLVideoFix extends CordovaPlugin {
     @Override
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
         if (action.equals(FIX_VIDEO)) {
-            // New thread
+            final String videoPath = args.getString(0);
             cordova.getThreadPool().execute(new Runnable() {
                 @Override
                 public void run() {
+                    String ext = FilenameUtils.getExtension(videoPath);
+                    String name = FilenameUtils.getBaseName(videoPath);
+                    URI uri = URI.create(videoPath.toString());
+                    AssetManager am = cordova.getActivity().getAssets();
+                    String filePath = uri.toString().replace("file:///" + INFINITY, "");
                     try {
-                        String videoPath = args.getString(0);
-                        String location = args.getString(1);
-                        String ext = FilenameUtils.getExtension(videoPath);
-                        String name = FilenameUtils.getBaseName(videoPath);
-                        AssetManager am = cordova.getActivity().getAssets();
-                        InputStream is = null;
-                        if( videoPath.startsWith("file:///"))
-                            videoPath = URI.create(videoPath).getPath();
-                        if( videoPath.startsWith("/android_asset/")) {
-                            videoPath = videoPath.replace("/android_asset/", "");
-                            is = am.open(videoPath);
-                        } else {
-                            location = location.replace("/android_asset/", "");
-                            location = location.substring(0, location.lastIndexOf("/"));
-                            is = am.open(location + "/" + videoPath);
-                        }
-
+                        InputStream is = am.open("www" + filePath);
                         File cacheDir = cordova.getActivity().getCacheDir();
                         File outputDir = new File(cacheDir, HTMLVIDEOS);
                         File outputFile = File.createTempFile(name, "." + ext, outputDir);
@@ -74,10 +64,6 @@ public class HTMLVideoFix extends CordovaPlugin {
                         callbackContext.success(outputFile.getAbsolutePath());
                     } catch (IOException e) {
                         e.printStackTrace();
-                        callbackContext.error(e.getMessage());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                        callbackContext.error(e.getMessage());
                     }
                 }
             });

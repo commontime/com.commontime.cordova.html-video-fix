@@ -14,17 +14,12 @@ plugins.htmlVideoFix.fixAllVideos(function() {
 eg.
 
 ```
-<video controls="">
-  <source src="bunny.mp4" type="video/mp4"></div>
-  <source src="bunny.ogg" type="video/ogg"></div>
-</video>
+<video controls="" src="assets/big_buck_bunny.mp4"></video>
 ```
 
 Will be transformed to:
 
 ```
-<video controls="">
-  <source src="/data/user/0/io.cordova.hellocordova/cache/htmlvideos/video1484775800.ogg" type="video/ogg">
-  <source src="/data/user/0/io.cordova.hellocordova/cache/htmlvideos/video545174706.mp4" type="video/mp4">
-</video>
+<video controls="" src="/data/data/io.cordova.hellocordova/cache/htmlvideos/big_buck_bunny805959135.mp4"></video>
+
 ```
