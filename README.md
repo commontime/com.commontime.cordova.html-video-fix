@@ -6,9 +6,18 @@ Replaces paths to HTML5 videos in the Android assets with paths to copied files 
 ```
 plugins.htmlVideoFix.fixVideo(function(path){console.log(path);}, function(error) {console.error(error);}, "file:///android_asset/www/assets/big_buck_bunny.mp4");
 
-/data/data/io.cordova.hellocordova/cache/htmlvideos/big_buck_bunny527194493.mp4
+"/data/data/io.cordova.hellocordova/cache/htmlvideos/big_buck_bunny527194493.mp4"
 ```
 
+eg.
+```
+var videoNode = document.querySelector('video');
+plugins.htmlVideoFix.fixVideo(function(path){
+  videoNode.src = path;
+}, function(){
+  console.error(arguments);
+}, videoNode.src );
+```
 
 **_plugins.htmlVideoFix.fixAllVideos( success, fail );_**
 ```
